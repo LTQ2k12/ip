@@ -1,1 +1,72 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="container">
+  <h2>Dashboard</h2>
+  <form id="createForm">
+    <input type="text" id="urlInput" placeholder="Nhập URL" required>
+    <button type="submit">Tạo link</button>
+  </form>
+
+  <div class="link-box">
+    <h3>Link đã tạo</h3>
+    <ul id="linkList"></ul>
+  </div>
+
+  <div class="log-box">
+    <h3>Log IP</h3>
+    <table class="log-table">
+      <thead>
+        <tr><th>IP</th><th>Địa chỉ</th><th>Thời gian</th></tr>
+      </thead>
+      <tbody id="logTable"></tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+async function loadLinks() {
+  const res = await fetch("/api/links");
+  const links = await res.json();
+  const list = document.getElementById("linkList");
+  list.innerHTML = "";
+  links.forEach(l => {
+    const li = document.createElement("li");
+    li.innerHTML = `<a href="/r/${l.id}" target="_blank">${location.origin}/r/${l.id}</a> 
+    <button onclick="viewLogs('${l.id}')">Xem log</button>`;
+    list.appendChild(li);
+  });
+}
+async function createLink(e) {
+  e.preventDefault();
+  const url = document.getElementById("urlInput").value;
+  const res = await fetch("/api/create", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ url })
+  });
+  document.getElementById("urlInput").value = "";
+  await loadLinks();
+}
+async function viewLogs(id) {
+  const res = await fetch(`/api/logs/${id}`);
+  const logs = await res.json();
+  const table = document.getElementById("logTable");
+  table.innerHTML = "";
+  logs.forEach(l => {
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td>${l.ip}</td><td>${l.location}</td><td>${l.time}</td>`;
+    table.appendChild(tr);
+  });
+}
+document.getElementById("createForm").addEventListener("submit", createLink);
+loadLinks();
+</script>
+</body>
+</html>
 
