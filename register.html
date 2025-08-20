@@ -3,14 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <title>Đăng ký</title>
+  <link rel="stylesheet" href="/style.css">
 </head>
 <body>
+<div class="container">
   <h2>Đăng ký</h2>
   <form method="POST" action="/register">
-    <input type="text" name="username" placeholder="Tên đăng nhập" required><br>
-    <input type="password" name="password" placeholder="Mật khẩu" required><br>
+    <input type="text" name="username" placeholder="Tên đăng nhập" required>
+    <input type="password" name="password" placeholder="Mật khẩu" required>
     <button type="submit">Đăng ký</button>
   </form>
-  <p>Đã có tài khoản? <a href="/login">Đăng nhập</a></p>
+  <p style="text-align:center;">Đã có tài khoản? <a href="/login.html">Đăng nhập</a></p>
+</div>
 </body>
 </html>
